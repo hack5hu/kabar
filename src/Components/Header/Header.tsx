@@ -1,14 +1,18 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 
-const Header = () => {
+const Header = ({navigation}) => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.backButton}>back</Text>
+    <TouchableOpacity style={styles.container} onPress={()=>navigation.goBack()}>
+      <Image
+              source={require('../..//Assets/Images/arrow.png')} // replace with your image source
+              style={styles.backButton}
+            
+            />
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>Fill your Profile</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

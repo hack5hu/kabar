@@ -2,7 +2,11 @@ import { Image, StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
 import { Icon } from 'react-native-paper';
 
-const Searchbox = ({value, setTerm}) => {
+interface CustomProps {
+  value: string;
+  setTerm: (text: string) => void;
+}
+const Searchbox = ({value, setTerm}:CustomProps) => {
   return (
     <View style={styles.inputContainer}>
       <Image
@@ -11,7 +15,7 @@ const Searchbox = ({value, setTerm}) => {
       />
       <TextInput
         placeholder="Search"
-        placeholderTextColor={'##A0A3BD'}
+        placeholderTextColor={'#A0A3BD'}
         style={styles.input}
         value={value}
         onChangeText={(text) => setTerm(text)}
@@ -42,9 +46,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 48,
-    // paddingHorizontal: 10,
     marginLeft:-8,
     fontSize: 14,
-    // borderWidth:1
   },
 });

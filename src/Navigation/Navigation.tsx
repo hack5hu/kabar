@@ -3,7 +3,6 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {useSelector} from 'react-redux';
 import LoginScreen from '../Screens/LoginScreen/LoginScreen';
 import SignUpScreen from '../Screens/SignUpScreen/SignUpScreen';
-import HomeScreen from '../Screens/HomeScreen/HomeScreen';
 import SplashScreen from '../Screens/SplashScreen/SplashScreen';
 import HomeTabNavigation from './HomeTabNavigation';
 

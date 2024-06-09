@@ -1,6 +1,5 @@
 import React from 'react';
 import {SafeAreaView, View, StyleSheet, Text, Image} from 'react-native';
-import { Circle, Path, Svg } from 'react-native-svg';
 
 const SplashScreen = () => {
   return (

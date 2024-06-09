@@ -1,3 +1,4 @@
+import React, {useState, useEffect} from 'react';
 import {
   Alert,
   FlatList,
@@ -7,26 +8,27 @@ import {
   TouchableOpacity,
   View,
   ActivityIndicator,
+  Image,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
 import {mainNewsCategories} from '../../MockData/MockData';
 import HeadlineNews from '../../Components/HeadlineNews/HeadlineNews';
 import TreadingNews from '../../Components/TreadingNews/TreadingNews';
 import {useDispatch} from 'react-redux';
 import {setIsLogin} from '../../Redux/Reducers';
 import {dataManagerApiRequest} from '../../DataManager/dataManager';
-import { SearchBar } from 'react-native-screens';
 import Searchbox from '../../Components/Searchbox/Searchbox';
 
-const HomeScreen = () => {
-  const [selectedCategory, setSelectedCategory] = useState(
+type Props = {};
+
+const HomeScreen: React.FC<Props> = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string>(
     mainNewsCategories[0],
   );
-  const [data, setData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState([]);
-  const [treading, setTreading] = useState();
-  const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(1);
+  const [data, setData] = useState<any[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [treading, setTreading] = useState<any>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -34,11 +36,10 @@ const HomeScreen = () => {
     dataCalling();
   }, [selectedCategory]);
 
-  const dataCalling = async (isLoadMore = false) => {
+  const dataCalling = async (isLoadMore: boolean = false) => {
     try {
       const response = await dataManagerApiRequest({
         ...(selectedCategory !== 'All' && {category: selectedCategory}),
-        page: isLoadMore ? page + 1 : 1,
       });
 
       if (response.data.articles.length !== 0) {
@@ -60,7 +61,16 @@ const HomeScreen = () => {
     }
   };
 
-  const CategoryItem = ({title}) => (
+  const ViceHeader = ({title, subTitle}: {title: string; subTitle: string}) => {
+    return (
+      <View style={styles.headerRow}>
+        <Text style={styles.sectionTitle}>{title}</Text>
+        <Text style={styles.seeAll}>{subTitle}</Text>
+      </View>
+    );
+  };
+
+  const CategoryItem = ({title}: {title: string}) => (
     <TouchableOpacity onPress={() => setSelectedCategory(title)}>
       <View
         style={[
@@ -77,6 +87,7 @@ const HomeScreen = () => {
       </View>
     </TouchableOpacity>
   );
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
@@ -86,22 +97,29 @@ const HomeScreen = () => {
           </View>
         ) : (
           <>
-            <Searchbox value={searchTerm} setTerm={setSearchTerm}/>
+            <View style={styles.headerContainer}>
+              <Image
+                source={require('../../Assets/Images/kabar.png')}
+                style={styles.logo}
+              />
+              <TouchableOpacity
+                style={styles.iconContainer}
+                onPress={() => dispatch(setIsLogin(false))}>
+                <Image
+                  source={require('../../Assets/Images/bell.png')}
+                  style={styles.bellIcon}
+                />
+              </TouchableOpacity>
+            </View>
+            <Searchbox value={searchTerm} setTerm={setSearchTerm} />
+
             <View>
-              <View style={styles.headerRow}>
-                <Text style={styles.sectionTitle}>Trending</Text>
-                <Text style={styles.seeAll}>See all</Text>
-              </View>
+              <ViceHeader title={'Treading'} subTitle={'See all'} />
               <TreadingNews data={treading} />
             </View>
-            <View style={styles.headerRow}>
-              <Text
-                style={styles.sectionTitle}
-                onPress={() => dispatch(setIsLogin(false))}>
-                Latest
-              </Text>
-              <Text style={styles.seeAll}>See all</Text>
-            </View>
+
+            <ViceHeader title={'Latest'} subTitle={'See all'} />
+
             <View>
               <FlatList
                 data={mainNewsCategories}
@@ -134,8 +152,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   innerContainer: {
-    margin: 24,
-    flex:1
+    marginHorizontal: 24,
+    // marginVertical:16,
+    flex: 1,
   },
   loadingContainer: {
     flex: 1,
@@ -146,28 +165,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical:8  },
+    marginVertical: 8,
+  },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: '400',
+    fontWeight: '600',
     lineHeight: 24,
     letterSpacing: 0.12,
-    color: '#4E4B66',
+    color: '#000',
   },
   seeAll: {
     fontSize: 14,
-    color: '#1877F2',
+    color: '#4E4B66',
   },
   categoryList: {
     // marginVertical: 10,
   },
   item: {
     marginBottom: 8,
-    paddingVertical:8,
+    paddingVertical: 8,
     paddingHorizontal: 8,
     borderBottomWidth: 2,
     borderBottomColor: 'transparent',
-    
   },
   selectedItem: {
     borderBottomColor: '#1877F2',
@@ -178,11 +197,40 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     letterSpacing: 0.12,
     color: '#4E4B66',
+    height:24
   },
   selectedTitle: {
     color: 'black',
   },
   newsList: {
-    flexGrow: 1, 
- },
+    flexGrow: 1,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 56,
+    marginBottom: 16,
+  },
+  logo: {
+    width: 99,
+    height: 30,
+  },
+  iconContainer: {
+    backgroundColor: '#FFF',
+    borderRadius: 6,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
+    height: 32,
+    width: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bellIcon: {
+    width: 18,
+    height: 21.5,
+  },
 });

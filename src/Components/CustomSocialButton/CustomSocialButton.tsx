@@ -1,13 +1,16 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 
-const CustomSocialButton = ({value}) => {
+const CustomSocialButton = ({value}:{value:string}) => {
+  const image =
+    value === 'Google'
+      ? require('../../Assets/Images/google.png')
+      : require('../../Assets/Images/facebook.png');
   return (
     <TouchableOpacity style={styles.container}>
       <Image
-        source={require('../../Assets/Images/Vector.png')}
-        height={16}
-        width={16}
+        source={image}
+        style={{height:21, width:21}}
       />
       <Text style={styles.text}>{value}</Text>
     </TouchableOpacity>

@@ -1,98 +1,183 @@
-import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import {
+  Alert,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ActivityIndicator
+} from 'react-native';
 import Header from '../../Components/Header/Header';
 import CustomButton from '../../Components/CustomButton/CustomButton';
 import CustomTextInput from '../../Components/CustomInput/CustomInput';
-import {useForm} from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import ImagePicker from 'react-native-image-crop-picker';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserDetails } from '../../Redux/Reducers';
 
-const ProfileScreen = () => {
+type Props = {
+  navigation: any;
+};
+
+const ProfileScreen = ({ navigation }: Props) => {
+  const [imageUri, setImageUri] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const {
     control,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
     getValues,
+    setValue,
   } = useForm({
     defaultValues: {},
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
 
+  const dispatch = useDispatch();
+  const { userDetails } = useSelector(state => state.global);
+
+  
+ 
+
+  const onValid = () => {
+    const formData = getValues();
+    const updatedUserDetails = { ...userDetails, ...formData, imageUri: imageUri };
+    try {
+      console.log(updatedUserDetails);
+      dispatch(setUserDetails(updatedUserDetails));
+      setIsLoading(true);
+      Alert.alert('Successfully saved')
+    } catch (e) {
+      setIsLoading(false);
+      Alert.alert(
+        'Error',
+        e.message,
+        [
+          {
+            text: 'OK',
+            onPress: () => console.log('OK Pressed'),
+          },
+        ],
+        { cancelable: false },
+      );
+    }
+  };
+
+  const __username = () => {
+    return (
+      <CustomTextInput
+        control={control}
+        defaultValue={userDetails?.user}
+        name="username"
+        labelText="Username"
+        isLabel
+      />
+    );
+  };
+
+  const __fullname = () => {
+    return (
+      <CustomTextInput
+        control={control}
+        defaultValue={userDetails?.fullName}
+        name="fullName"
+        labelText="Full Name"
+        isLabel
+      />
+    );
+  };
+
+  const __emailAddress = () => {
+    return (
+      <CustomTextInput
+        control={control}
+        defaultValue={userDetails?.email}
+        name="email"
+        required
+        labelText="Email Address"
+        isLabel
+        rules={{
+          required: {
+            value: true,
+            message: 'Email Address is required!',
+          },
+        }}
+      />
+    );
+  };
+
+  const __mobileNumber = () => {
+    return (
+      <CustomTextInput
+        control={control}
+        defaultValue={userDetails?.phone}
+        name="phone"
+        required
+        labelText="Phone Number"
+        isLabel
+        rules={{
+          required: {
+            value: true,
+            message: 'Phone Number is required!',
+          },
+        }}
+      />
+    );
+  };
+
+  const pickImage = async () => {
+    try {
+      const image = await ImagePicker.openPicker({
+        mediaType: 'photo',
+        compressImageMaxHeight: 550,
+        compressImageMaxWidth: 550,
+        multiple: false,
+        includeBase64: true,
+        maxFiles: 1,
+        compressImageQuality: 0.8,
+      });
+      const source = { uri: image.path };
+      setImageUri(source);
+      setIsLoading(false); 
+    } catch (error) {
+      Alert.alert('ImagePicker error:', error?.message);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
-        <Header />
+        <Header  navigation={navigation}/>
         <View style={styles.imageContainer}>
           <View style={styles.mainCircle}>
-            {/* <Image
-              source={require('../..//Assets/Images/Vector.png')} // replace with your image source
-              style={styles.image}
-            /> */}
-            <View style={styles.image} />
-            <View style={styles.smallCircle}>
-              {/* <Image
-                source={require('../../Assets/Images/Vector.png')} // replace with your image source
+            {imageUri ? (
+              <Image source={{ uri: imageUri?.uri }} style={styles.image} />
+            ) : (
+              <View style={styles.image} />
+            )}
+            <TouchableOpacity
+              style={styles.smallCircle}
+              onPress={pickImage}>
+              <Image
+                source={require('../../Assets/Images/camera.png')}
                 style={styles.smallImage}
-              /> */}
-              <View style={styles.smallImage} />
-            </View>
+              />
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.formContainer}>
-          <CustomTextInput
-            control={control}
-            name="username"
-            labelText="Username"
-            isLabel
-            rules={{
-              required: {
-                value: true,
-                message: 'Username is required!',
-              },
-            }}
-          />
-          <CustomTextInput
-            control={control}
-            name="fullName"
-            labelText="Full Name"
-            isLabel
-            rules={{
-              required: {
-                value: true,
-                message: 'Full Name is required!',
-              },
-            }}
-          />
-          <CustomTextInput
-            control={control}
-            name="email"
-            required
-            labelText="Email Address"
-            isLabel
-            rules={{
-              required: {
-                value: true,
-                message: 'Email Address is required!',
-              },
-            }}
-          />
-          {/* <View style={styles.spacing} /> */}
-          <CustomTextInput
-            control={control}
-            name="phone"
-            required
-            labelText="Phone Number"
-            isLabel
-            rules={{
-              required: {
-                value: true,
-                message: 'Phone Number is required!',
-              },
-            }}
-          />
+          {__username()}
+          {__fullname()}
+          {__emailAddress()}
+          {__mobileNumber()}
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <CustomButton value="Next" />
+        
+          <CustomButton value="Next" onPress={handleSubmit(onValid)} />
+        
       </View>
     </SafeAreaView>
   );
@@ -107,14 +192,10 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
-    marginTop: 24,
-    marginHorizontal:24
+    marginHorizontal: 24,
   },
   formContainer: {
     flex: 1,
-  },
-  spacing: {
-    height: 10,
   },
   buttonContainer: {
     height: 130,
@@ -162,8 +243,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
   },
   smallImage: {
-    height: 50,
-    width: 50,
-    borderRadius: 25,
+    height: 16,
+    width: 16,
   },
 });
+

@@ -9,30 +9,13 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 const Tab = createBottomTabNavigator();
 const ProfileStack = createStackNavigator();
 
-const ProfileStackScreen = () => {
-  const navigation = useNavigation();
-
-  return (
-    <ProfileStack.Navigator>
-      <ProfileStack.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{
-          headerShown: false,
-          gestureEnabled: false, // Disable swipe gesture to avoid accidentally navigating back
-        }}
-      />
-    </ProfileStack.Navigator>
-  );
-};
-
 const HomeTabNavigation = () => {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
         tabBarIcon: ({color, size}) => {
           let iconName;
-
+          size = 20;
           if (route.name === 'Home') {
             iconName = 'home';
           } else if (route.name === 'Explore') {
@@ -40,10 +23,8 @@ const HomeTabNavigation = () => {
           } else if (route.name === 'BookMark') {
             iconName = 'bookmark-outline';
           } else if (route.name === 'Profile') {
-            iconName = 'bookmark-outline';
+            iconName = 'account-circle-outline';
           }
-
-          // You can return any component that you like here!
           return (
             <MaterialCommunityIcons name={iconName} size={size} color={color} />
           );
@@ -52,6 +33,9 @@ const HomeTabNavigation = () => {
       tabBarOptions={{
         activeTintColor: '#1877F2',
         inactiveTintColor: '#4E4B66',
+        labelStyle: {
+          fontSize: 14, 
+        },
       }}>
       <Tab.Screen
         name="Home"
@@ -70,7 +54,7 @@ const HomeTabNavigation = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileStackScreen}
+        component={ProfileScreen}
         options={{headerShown: false}}
       />
     </Tab.Navigator>

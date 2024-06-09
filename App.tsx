@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import {LogBox, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import RootNavigation from './src/Navigation/Navigation';
@@ -11,12 +11,17 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 function App(): React.JSX.Element {
 const Stack = createStackNavigator();
-
+  LogBox.ignoreAllLogs()
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <Provider store={store}>
         <PersistGate persistor={persister}>
           <NavigationContainer>
+            <StatusBar
+              backgroundColor="#fff"
+              barStyle="dark-content" 
+              animated={true}
+            />
             <SafeAreaView style={styles.sectionContainer}>
               <RootNavigation />
             </SafeAreaView>
@@ -30,6 +35,7 @@ const Stack = createStackNavigator();
 const styles = StyleSheet.create({
   sectionContainer: {
     flex: 1,
+    backgroundColor: '#fff',
   },
 });
 

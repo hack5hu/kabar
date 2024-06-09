@@ -1,28 +1,28 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-import { Controller } from 'react-hook-form';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import {Controller} from 'react-hook-form';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type CustomTextInputProps = {
-  onChangeText?: (value: any) => void;
-  textColor?: string;
-  width?: string;
-  errorText?: string;
-  value?: string;
-  iconBool?: boolean;
-  name: string;
   control: any;
   rules?: any;
+  name: string;
   defaultValue?: any;
   disabled?: boolean;
   isLabel?: boolean;
   labelText?: string;
-  style?: any;
   testID?: string;
   required?: boolean;
   password?: boolean;
   iconName?: string;
 };
+
 const CustomTextInput = ({
   control,
   rules,
@@ -31,16 +31,15 @@ const CustomTextInput = ({
   disabled,
   isLabel,
   labelText,
-  style,
   testID,
   required,
   password,
-  iconName
+  iconName,
 }: CustomTextInputProps) => {
-  const [isShowPass, setIsShowPass] = useState(false)
+  const [isShowPass, setIsShowPass] = useState(false);
 
-  const passwordIcon = !isShowPass? 'eye-off-outline' :'eye-outline'
-  
+  const passwordIcon = isShowPass ? 'eye-outline' : 'eye-off-outline';
+
   return (
     <View style={styles.container}>
       <Controller
@@ -48,35 +47,29 @@ const CustomTextInput = ({
         rules={rules}
         name={name}
         defaultValue={defaultValue}
-        render={({
-          field: { onChange, value },
-          formState: { isSubmitted },
-          fieldState: { error },
-        }) => {
+        render={({field: {onChange, value}, fieldState: {error}}) => {
           return (
             <View>
               {isLabel && (
                 <Text style={styles.labelText}>
                   {labelText}
-                  {required && <Text style={{ color: '#C30052' }}>*</Text>}
+                  {required && <Text style={{color: '#C30052'}}>*</Text>}
                 </Text>
-              )} 
+              )}
               <View
                 style={[
                   styles.inputContainer,
                   error ? styles.errorInput : null,
-                ]}
-              >
+                ]}>
                 <TextInput
                   testID={testID}
                   onChangeText={(text: any) => {
                     onChange(text);
                   }}
-                  editable={!disabled}
-                  value={
-                    password && isShowPass ? '*'.repeat(value.length) : value
-                  }
+                  // editable={!disabled}
+                  value={value}
                   style={styles.input}
+                  secureTextEntry={password && !isShowPass}
                 />
                 {iconName && error && (
                   <TouchableOpacity
@@ -86,8 +79,7 @@ const CustomTextInput = ({
                       justifyContent: 'center',
                       alignContent: 'center',
                     }}
-                    onPress={() => setIsShowPass(!isShowPass)}
-                  >
+                    onPress={() => onChange('')}>
                     <Icon name={iconName} size={22} color="#C30052" />
                   </TouchableOpacity>
                 )}
@@ -99,13 +91,8 @@ const CustomTextInput = ({
                       justifyContent: 'center',
                       alignContent: 'center',
                     }}
-                    onPress={() => setIsShowPass(!isShowPass)}
-                  >
-                    <Icon
-                      name={password ? passwordIcon : iconName}
-                      size={22}
-                      color="#4E4B66"
-                    />
+                    onPress={() => setIsShowPass(!isShowPass)}>
+                    <Icon name={passwordIcon} size={22} color="#4E4B66" />
                   </TouchableOpacity>
                 )}
               </View>
@@ -175,4 +162,3 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
 });
-

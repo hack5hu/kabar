@@ -15,7 +15,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setIsLogin, setUserDetails} from '../../Redux/Reducers';
 
 const LoginScreen = ({navigation}) => {
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(true);
   const {
     control,
     handleSubmit,
@@ -47,7 +47,7 @@ const LoginScreen = ({navigation}) => {
       });
       setError('password', {
         type: 'manual',
-        message: 'Invalid Username ',
+        message: 'Invalid Password ',
       });
     }
   };
@@ -61,6 +61,8 @@ const LoginScreen = ({navigation}) => {
         required
         isLabel
         rules={{required: 'Username is required!'}}
+        iconName="close"
+        
       />
     );
   };
@@ -241,7 +243,7 @@ const styles = StyleSheet.create({
     color: '#4E4B66',
   },
   signUp: {
-    fontWeight: '400',
+    fontWeight: '600',
     fontSize: 14,
     fontFamily: 'Poppins-Regular',
     lineHeight: 21,

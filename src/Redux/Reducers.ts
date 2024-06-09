@@ -23,7 +23,7 @@ const globalSlice = createSlice({
       state.isLogin = action.payload;
     },
     setUserDetails: (state, action) => {
-      state.userDetails = JSON.parse(action.payload);
+      state.userDetails = (action.payload);
     },
     setLoginUserDetails: (state, action: { payload: UserDetails }) => {
       state.LoginUserDetails.push(action.payload);

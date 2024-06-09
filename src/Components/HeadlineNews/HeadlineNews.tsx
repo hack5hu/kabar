@@ -1,10 +1,10 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import { getTimeAgo } from '../../Helper/helper';
+import {getTimeAgo} from '../../Helper/helper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { NewsData } from '../../Constants/Type';
+import {NewsData} from '../../Constants/Type';
 
-const HeadlineNews = ({data}:NewsData) => {
+const HeadlineNews = ({data}: NewsData) => {
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
@@ -23,10 +23,10 @@ const HeadlineNews = ({data}:NewsData) => {
         <View style={styles.footer}>
           <View style={styles.sourceInfo}>
             <Text style={styles.source}>{data?.source?.name}</Text>
-            <Icon name={'clock-time-three-outline'} style={styles.icon} />
+            <Icon name={'clock-time-three-outline'} size={13} />
             <Text style={styles.time}>{getTimeAgo(data?.publishedAt)}</Text>
           </View>
-          <Text style={styles.more}>...</Text>
+          <Icon name={'dots-horizontal'} size={13} />
         </View>
       </View>
     </View>
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   },
   description: {
     height: 48,
-    width: "85%",
+    width: '85%',
     fontSize: 16,
     fontWeight: '400',
     lineHeight: 24,
@@ -80,8 +80,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    flex: 1,
+    width: '95%',
   },
-  icon: {marginLeft: 8},
   sourceInfo: {
     flexDirection: 'row',
     alignItems: 'center',

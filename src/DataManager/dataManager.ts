@@ -19,8 +19,8 @@ export const dataManagerApiRequest = async ({ category, page = 1 }: ApiRequest) 
     console.log(response)
     return response;
   } catch (error) {
-    console.log('An error occurred:', error.response.data);
-    return error.response.data;
+    console.log('An error occurred:', error?.response?.data);
+    return error?.response.data;
   }
 };
 

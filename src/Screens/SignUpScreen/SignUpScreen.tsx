@@ -25,7 +25,7 @@ type FormData = {
 };
 
 const SignUpScreen = ({navigation}: {navigation: any}) => {
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(true);
   const {
     control,
     handleSubmit,
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     color: '#4E4B66',
   },
   signUp: {
-    fontWeight: '400',
+    fontWeight: '600',
     fontSize: 14,
     fontFamily: 'Poppins-Regular',
     lineHeight: 21,

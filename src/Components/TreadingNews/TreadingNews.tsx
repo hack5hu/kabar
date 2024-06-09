@@ -2,8 +2,9 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {getTimeAgo} from '../../Helper/helper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { NewsData } from '../../Constants/Type';
 
-const TreadingNews = ({data}) => {
+const TreadingNews = ({data}:NewsData) => {
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
@@ -26,7 +27,7 @@ const TreadingNews = ({data}) => {
             {/* //clock-time-three-outline */}
             <Text style={styles.time}>{getTimeAgo(data?.publishedAt)}</Text>
           </View>
-          <Text style={styles.more}>...</Text>
+          <Icon name={'dots-horizontal'} style={styles.icon} size={13} />
         </View>
       </View>
     </View>
@@ -67,15 +68,14 @@ const styles = StyleSheet.create({
   descriptionContainer: {
     flex: 1,
     height: 48,
-    width: 264,
+    // width: 264,
   },
   description: {
-    // height: 48,
-    // width: 264,
     fontSize: 16,
     fontWeight: '400',
     lineHeight: 24,
     letterSpacing: 0.12,
+    width:'100%'
   },
   footer: {
     flexDirection: 'row',
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  icon: {marginLeft: 16},
+  icon: {marginLeft: 2},
   source: {
     fontSize: 13,
     fontWeight: '600',
