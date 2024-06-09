@@ -26,12 +26,23 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
+	
 	  <!-- Do not change NSAllowsArbitraryLoads to true, or you will risk app rejection! -->
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+
+	<key>NSPhotoLibraryUsageDescription</key>
+		<string>Your app needs access to photos to enable image selection.</string>
+		<key>NSCameraUsageDescription</key>
+		<string>Your app needs access to the camera to take photos.</string>
+	<key>UIAppFonts</key>
+	<array>
+  <string>MaterialCommunityIcons.ttf</string>  </array>
+
+  
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UILaunchStoryboardName</key>
