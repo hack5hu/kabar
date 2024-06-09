@@ -1,40 +1,30 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import { getTimeAgo } from '../../Helper/helper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { NewsData } from '../../Constants/Type';
 
-const HeadlineNews = () => {
+const HeadlineNews = ({data}:NewsData) => {
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image
-          source={require('../../Assets/Images/Vector.png')}
-          height={96}
-          width={96}
-          style={styles.image}
-        />
+        <Image source={{uri: data?.urlToImage}} style={styles.image} />
       </View>
 
       <View style={styles.textContainer}>
-        <Text style={styles.category}>Europe</Text>
+        <Text style={styles.category}>India</Text>
 
         <View style={styles.descriptionContainer}>
           <Text numberOfLines={2} style={styles.description}>
-            Lorem ipsum dolor sit amet consectetur adipisicing
+            {data?.title}
           </Text>
         </View>
 
         <View style={styles.footer}>
           <View style={styles.sourceInfo}>
-            <Text style={styles.source}>BBC_news</Text>
-            <Image
-              source={require('../../Assets/Images/Vector.png')}
-              height={96}
-              width={96}
-              
-            />
-            <Text style={styles.time}>
-              {getTimeAgo('2024-06-08T06:08:47Z')}
-            </Text>
+            <Text style={styles.source}>{data?.source?.name}</Text>
+            <Icon name={'clock-time-three-outline'} style={styles.icon} />
+            <Text style={styles.time}>{getTimeAgo(data?.publishedAt)}</Text>
           </View>
           <Text style={styles.more}>...</Text>
         </View>
@@ -57,7 +47,7 @@ const styles = StyleSheet.create({
     flex: 0.3,
   },
   image: {
-    borderRadius:6,
+    borderRadius: 6,
     height: 96,
     width: 96,
   },
@@ -80,7 +70,7 @@ const styles = StyleSheet.create({
   },
   description: {
     height: 48,
-    width: 264,
+    width: "85%",
     fontSize: 16,
     fontWeight: '400',
     lineHeight: 24,
@@ -91,6 +81,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  icon: {marginLeft: 8},
   sourceInfo: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -1,3 +1,4 @@
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -5,25 +6,86 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
 import CustomTextInput from '../../Components/CustomInput/CustomInput';
-import {useForm} from 'react-hook-form';
+import {useForm, SubmitHandler} from 'react-hook-form';
 import CheckBox from '@react-native-community/checkbox';
 import CustomButton from '../../Components/CustomButton/CustomButton';
 import CustomSocialButton from '../../Components/CustomSocialButton/CustomSocialButton';
+import {passwordValidation, usernameValidation} from '../../Helper/helper';
+import {useDispatch} from 'react-redux';
+import {
+  setIsLogin,
+  setLoginUserDetails,
+  setUserDetails,
+} from '../../Redux/Reducers';
 
-const SignUpScreen = () => {
+type FormData = {
+  username: string;
+  password: string;
+};
+
+const SignUpScreen = ({navigation}: {navigation: any}) => {
   const [isChecked, setIsChecked] = useState(false);
   const {
     control,
     handleSubmit,
     formState: {errors},
     getValues,
-  } = useForm({
+    setError,
+  } = useForm<FormData>({
     defaultValues: {},
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
+  const {navigate} = navigation;
+  const dispatch = useDispatch();
+
+  const onValid: SubmitHandler<FormData> = () => {
+    console.log('Validation successful');
+    const {username, password} = getValues();
+    const data = {user: username, pass: password};
+    dispatch(setLoginUserDetails(data));
+    dispatch(setIsLogin(true));
+    dispatch(setUserDetails({user: username, pass: password}));
+  };
+
+  const __username = () => (
+    <CustomTextInput
+      control={control}
+      name="username"
+      labelText="Username"
+      required
+      isLabel
+      rules={usernameValidation}
+      iconName="close"
+    />
+  );
+
+  const __passwordField = () => (
+    <CustomTextInput
+      control={control}
+      name="password"
+      labelText="Password"
+      required
+      password
+      isLabel
+      rules={passwordValidation}
+    />
+  );
+
+  const __checkbox = () => (
+    <View style={styles.checkboxContainer}>
+      <CheckBox
+        boxType="square"
+        onCheckColor="#fff"
+        onFillColor="#1877F2"
+        onValueChange={() => setIsChecked(!isChecked)}
+        value={isChecked}
+        style={styles.CheckBox}
+      />
+      <Text style={styles.checkboxText}>Remember me</Text>
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -33,48 +95,11 @@ const SignUpScreen = () => {
           <Text style={styles.smallHeader}>Signup to get Started</Text>
         </View>
         <View style={styles.formContainer}>
-          <CustomTextInput
-            control={control}
-            name="username"
-            labelText="Username"
-            required
-            isLabel
-            rules={{
-              required: {
-                value: true,
-                message: 'Username is required!',
-              },
-            }}
-          />
+          {__username()}
+          {__passwordField()}
+          <View style={styles.rememberMeContainer}>{__checkbox()}</View>
           <View style={styles.spacing} />
-          <CustomTextInput
-            control={control}
-            name="password"
-            labelText="Password"
-            required
-            isLabel
-            rules={{
-              required: {
-                value: true,
-                message: 'Password is required!',
-              },
-            }}
-          />
-          <View style={styles.rememberMeContainer}>
-            <View style={styles.checkboxContainer}>
-              <CheckBox
-                boxType="square"
-                onCheckColor="#fff"
-                onFillColor="#1877F2"
-                onValueChange={() => setIsChecked(!isChecked)}
-                value={isChecked}
-                style={styles.CheckBox}
-              />
-              <Text style={styles.checkboxText}>Remember me</Text>
-            </View>
-          </View>
-          <View style={styles.spacing} />
-          <CustomButton value="Sign Up" />
+          <CustomButton value="Sign Up" onPress={handleSubmit(onValid)} />
           <View style={styles.orContainer}>
             <Text style={styles.checkboxText}>or continue with</Text>
           </View>
@@ -84,7 +109,7 @@ const SignUpScreen = () => {
           </View>
           <View style={styles.signUpContainer}>
             <Text style={styles.dontHaveAccount}>Already have an account?</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigate('Login')}>
               <Text style={styles.signUp}> Login</Text>
             </TouchableOpacity>
           </View>
@@ -99,9 +124,10 @@ export default SignUpScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   innerContainer: {
-    margin: 16,
+    marginHorizontal: 24,
   },
   headerContainer: {
     height: 155,

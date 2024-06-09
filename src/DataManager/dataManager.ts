@@ -1,44 +1,29 @@
-import axios, {AxiosRequestConfig} from 'axios';
-import {Alert} from 'react-native';
-// import {baseUrl} from '../constants/constantValues';
-// import networkManager from '../helper/internetServicers';
-import {baseUrl, apiKey} from '../Constants/ConstantValues';
+import axios, { AxiosRequestConfig } from 'axios';
+import { Alert } from 'react-native';
+import { baseUrl, apiKey } from '../Constants/ConstantValues';
+
 interface ApiRequest {
   category?: string;
-  type?: string;
+  page?: number;
 }
 
-
-export const dataManagerApiRequest = async ({
-category,
-}: ApiRequest) => {
-  console.log(buildUrl(category))
+export const dataManagerApiRequest = async ({ category, page = 1 }: ApiRequest) => {
+  console.log(buildUrl(category, page));
   const config: AxiosRequestConfig = {
     method: 'GET',
     maxBodyLength: Infinity,
-    url: buildUrl(category)
+    url: buildUrl(category, page),
   };
-
-
   try {
-    // const isNetworkAvailable = await networkManager.isNetworkAvailable();
-    // if (isNetworkAvailable) {
-      const response = await axios.request(config);
-      console.log(response.data.articles[0])
-      return response;
-    // } else {
-      Alert.alert('Please connect to the internet');
-      throw new Error('internet Error');
-      // return
-    // }
+    const response = await axios.request(config);
+    console.log(response)
+    return response;
   } catch (error) {
     console.log('An error occurred:', error.response.data);
-    return error.response.data
-    // throw error.response.data;
-    // return error
+    return error.response.data;
   }
 };
 
-const buildUrl = (  category) => {
-  return `${baseUrl}top-headlines?language=en&country=in${category ? '&category='+category:''}&apiKey=${apiKey}`;
+const buildUrl = (category?: string, page: number = 1) => {
+  return `${baseUrl}top-headlines?language=en&country=in${category ? '&category=' + category : ''}&apiKey=${apiKey}`;
 };

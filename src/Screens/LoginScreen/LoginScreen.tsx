@@ -11,20 +11,89 @@ import {useForm} from 'react-hook-form';
 import CheckBox from '@react-native-community/checkbox';
 import CustomButton from '../../Components/CustomButton/CustomButton';
 import CustomSocialButton from '../../Components/CustomSocialButton/CustomSocialButton';
-import { dataManagerApiRequest } from '../../DataManager/dataManager';
+import {useDispatch, useSelector} from 'react-redux';
+import {setIsLogin, setUserDetails} from '../../Redux/Reducers';
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   const [isChecked, setIsChecked] = useState(false);
   const {
     control,
     handleSubmit,
     formState: {errors},
     getValues,
+    setError,
   } = useForm({
     defaultValues: {},
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
+  const {navigate} = navigation;
+  const dispatch = useDispatch();
+  const LoginUserDetails = useSelector(state => state.global.LoginUserDetails);
+
+  const onValid = () => {
+    console.log('Validation successful');
+    const {username, password} = getValues();
+    const user = LoginUserDetails.find(
+      user => user.user === username && user.pass === password,
+    );
+    if (user) {
+      dispatch(setIsLogin(true));
+      dispatch(setUserDetails({user: username, pass: password}));
+    } else {
+      setError('username', {
+        type: 'manual',
+        message: 'Invalid Username',
+      });
+      setError('password', {
+        type: 'manual',
+        message: 'Invalid Username ',
+      });
+    }
+  };
+
+  const __username = () => {
+    return (
+      <CustomTextInput
+        control={control}
+        name="username"
+        labelText="Username"
+        required
+        isLabel
+        rules={{required: 'Username is required!'}}
+      />
+    );
+  };
+
+  const __passwordField = () => {
+    return (
+      <CustomTextInput
+        control={control}
+        name="password"
+        labelText="Password"
+        required
+        password
+        isLabel
+        rules={{required: 'Password is required!'}}
+      />
+    );
+  };
+
+  const __checkbox = () => {
+    return (
+      <View style={styles.checkboxContainer}>
+        <CheckBox
+          boxType="square"
+          onCheckColor="#fff"
+          onFillColor="#1877F2"
+          onValueChange={() => setIsChecked(!isChecked)}
+          value={isChecked}
+          style={styles.CheckBox}
+        />
+        <Text style={styles.checkboxText}>Remember me</Text>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -37,50 +106,16 @@ const LoginScreen = () => {
           </Text>
         </View>
         <View style={styles.formContainer}>
-          <CustomTextInput
-            control={control}
-            name="username"
-            labelText={'Username'}
-            required
-            isLabel={true}
-            rules={{
-              required: {
-                value: true,
-                message: 'Email is required!',
-              },
-            }}
-          />
-          <CustomTextInput
-            control={control}
-            name="password"
-            labelText={'Password'}
-            required
-            isLabel={true}
-            rules={{
-              required: {
-                value: true,
-                message: 'Password is required!',
-              },
-            }}
-          />
+          {__username()}
+          {__passwordField()}
           <View style={styles.rememberMeContainer}>
-            <View style={styles.checkboxContainer}>
-              <CheckBox
-                boxType="square"
-                onCheckColor="#fff"
-                onFillColor="#1877F2"
-                onValueChange={() => setIsChecked(!isChecked)}
-                value={isChecked}
-                style={styles.CheckBox}
-              />
-              <Text style={styles.checkboxText}>Remember me</Text>
-            </View>
+            {__checkbox()}
             <TouchableOpacity>
               <Text style={styles.forgetText}>Forgot the password?</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.spacing} />
-          <CustomButton value={'Login'} onPress={()=>dataManagerApiRequest({category:'sports'})}/>
+          <CustomButton value={'Login'} onPress={handleSubmit(onValid)} />
           <View style={styles.orContainer}>
             <Text style={styles.checkboxText}>or continue with</Text>
           </View>
@@ -90,7 +125,7 @@ const LoginScreen = () => {
           </View>
           <View style={styles.signUpContainer}>
             <Text style={styles.dontHaveAccount}>Don’t have an account?</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigate('Signup')}>
               <Text style={styles.signUp}> Sign Up</Text>
             </TouchableOpacity>
           </View>
@@ -105,9 +140,10 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   innerContainer: {
-    margin: 24,
+    marginHorizontal: 24,
   },
   headerContainer: {
     height: 240,

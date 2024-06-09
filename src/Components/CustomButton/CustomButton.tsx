@@ -3,7 +3,7 @@ import React from 'react';
 
 const CustomButton = ({value, onPress}) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity style={styles.container} onPress={()=>onPress()}>
       <Text style={styles.text}>{value}</Text>
     </TouchableOpacity>
   );

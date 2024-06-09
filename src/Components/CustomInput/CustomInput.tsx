@@ -1,7 +1,7 @@
-import React from 'react';
-import {View, Text, TextInput, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {Controller} from 'react-hook-form';
-// import {theme} from '../../helper/theme';
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { Controller } from 'react-hook-form';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type CustomTextInputProps = {
   onChangeText?: (value: any) => void;
@@ -19,7 +19,9 @@ type CustomTextInputProps = {
   labelText?: string;
   style?: any;
   testID?: string;
-  required?: boolean
+  required?: boolean;
+  password?: boolean;
+  iconName?: string;
 };
 const CustomTextInput = ({
   control,
@@ -31,9 +33,14 @@ const CustomTextInput = ({
   labelText,
   style,
   testID,
-  required
+  required,
+  password,
+  iconName
 }: CustomTextInputProps) => {
-  // render
+  const [isShowPass, setIsShowPass] = useState(false)
+
+  const passwordIcon = !isShowPass? 'eye-off-outline' :'eye-outline'
+  
   return (
     <View style={styles.container}>
       <Controller
@@ -42,28 +49,36 @@ const CustomTextInput = ({
         name={name}
         defaultValue={defaultValue}
         render={({
-          field: {onChange, value},
-          formState: {isSubmitted},
-          fieldState: {error},
+          field: { onChange, value },
+          formState: { isSubmitted },
+          fieldState: { error },
         }) => {
           return (
             <View>
-              {isLabel && <Text style={styles.labelText}>{labelText}{required && <Text style={{color:'#C30052'}}>*</Text>}</Text>}
+              {isLabel && (
+                <Text style={styles.labelText}>
+                  {labelText}
+                  {required && <Text style={{ color: '#C30052' }}>*</Text>}
+                </Text>
+              )} 
               <View
                 style={[
                   styles.inputContainer,
                   error ? styles.errorInput : null,
-                ]}>
+                ]}
+              >
                 <TextInput
                   testID={testID}
                   onChangeText={(text: any) => {
                     onChange(text);
                   }}
-                  editable={disabled}
-                  value={value}
+                  editable={!disabled}
+                  value={
+                    password && isShowPass ? '*'.repeat(value.length) : value
+                  }
                   style={styles.input}
                 />
-                {error && (
+                {iconName && error && (
                   <TouchableOpacity
                     style={{
                       height: 24,
@@ -71,22 +86,32 @@ const CustomTextInput = ({
                       justifyContent: 'center',
                       alignContent: 'center',
                     }}
-                    onPress={()=>console.log('pressing')}
-                    >
-                    <Image
-                      source={require('../../Assets/Images/Vector.png')}
-                      height={16}
-                      width={16}
+                    onPress={() => setIsShowPass(!isShowPass)}
+                  >
+                    <Icon name={iconName} size={22} color="#C30052" />
+                  </TouchableOpacity>
+                )}
+                {password && (
+                  <TouchableOpacity
+                    style={{
+                      height: 24,
+                      width: 24,
+                      justifyContent: 'center',
+                      alignContent: 'center',
+                    }}
+                    onPress={() => setIsShowPass(!isShowPass)}
+                  >
+                    <Icon
+                      name={password ? passwordIcon : iconName}
+                      size={22}
+                      color="#4E4B66"
                     />
                   </TouchableOpacity>
                 )}
               </View>
-              {isSubmitted && error && (
+              {error && (
                 <View style={styles.errorView}>
-                  <Image
-                    source={require('../../Assets/Images/Frame.png')}
-                    
-                  />
+                  <Icon name={'alert-circle-outline'} size={14} color="red" />
                   <Text style={styles.errorText}>{error?.message}</Text>
                 </View>
               )}
@@ -113,7 +138,6 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     letterSpacing: 0.12,
     color: '#4E4B66',
-    // color: theme.textColor,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -135,16 +159,11 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
     height: 21,
-    width: 124,
-  },
-  icon: {
-    marginRight: 10,
   },
   input: {
     flex: 1,
     height: 48,
     paddingHorizontal: 10,
-    // color: theme.textColor,
     fontSize: 14,
   },
   errorText: {
@@ -155,8 +174,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.12,
     marginLeft: 5,
   },
-  userImgIcon: {
-    height: 25,
-    width: 25,
-  },
 });
+
