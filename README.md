@@ -1,79 +1,130 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Kabar App
 
-# Getting Started
+Kabar is a new mobile application that provides users with a seamless and user-friendly interface for navigating through various sections such as Home, Explore, BookMark, and Profile. This README file will guide you through the setup and running process of the Kabar app.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Features
 
-## Step 1: Start the Metro Server
+- **Home Screen**: The main screen displaying the latest content.
+- **Explore Screen**: Discover new and trending content.
+- **Bookmark Screen**: Save your favorite content for quick access.
+- **Profile Screen**: Manage your user profile, including uploading profile pictures and updating personal information.
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+## Prerequisites
 
-To start Metro, run the following command from the _root_ of your React Native project:
+Before you can run the Kabar app, ensure you have the following installed on your development machine:
 
-```bash
-# using npm
-npm start
+- [Node.js](https://nodejs.org/) (version 12 or higher)
+- [npm](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/)
+- [React Native CLI](https://reactnative.dev/docs/environment-setup) (for running on Android/iOS devices or emulators)
+- [Xcode](https://developer.apple.com/xcode/) (for running on iOS devices or emulators)
+- [Android Studio](https://developer.android.com/studio) (for running on Android devices or emulators)
 
-# OR using Yarn
-yarn start
+## Getting Started
+
+Follow these steps to set up and run the Kabar app on your local machine:
+
+1. **Clone the Repository**:
+   ```sh
+   git clone https://github.com/yourusername/kabar-app.git
+   cd kabar-app
+   ```
+
+2. **Install Dependencies**:
+   Using npm:
+   ```sh
+   npm install
+   ```
+   Or using Yarn:
+   ```sh
+   yarn install
+   ```
+
+3. **Run the Metro Bundler**:
+   ```sh
+   npx react-native start
+   ```
+
+4. **Run on Android**:
+   Make sure you have an Android emulator running or an Android device connected via USB.
+   ```sh
+   npx react-native run-android
+   ```
+
+5. **Run on iOS**:
+   Make sure you have Xcode installed and an iOS emulator running or an iOS device connected.
+   ```sh
+   npx react-native run-ios
+   ```
+
+## Directory Structure
+
+```
+kabar-app/
+├── android/                   # Android native files
+├── ios/                       # iOS native files
+├── src/
+│   ├── Assets/                # Image and other assets
+│   ├── Components/            # Reusable components
+│   ├── Constants              # Constant Var
+│   ├── DataManager            # API Calls
+│   ├── Helper                 # Small Helper Fn
+│   ├── MockData               # Static Data
+│   ├── Navigation/            # Navigation configuration
+│   ├── Redux/                 # Redux store and reducers
+│   ├── Screens/               # Screen components
+├── .gitignore
+├── package.json
+├── README.md
+├── App.js                 # Main app component
+├── index.js               # Entry point
+└── ...
 ```
 
-## Step 2: Start your Application
+## Screens
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+- **HomeScreen**: Main screen displaying the latest content.
+- **ProfileScreen**: Screen where users can view and edit their profile information.
+- **ExploreScreen**: Discover new content.
+- **BookmarkScreen**: Access saved content.
 
-### For Android
+## Navigation
 
-```bash
-# using npm
-npm run android
+The app uses React Navigation for handling navigation between screens. The main navigation is managed by a bottom tab navigator with the following tabs:
 
-# OR using Yarn
-yarn android
-```
+- Home
+- Explore
+- BookMark
+- Profile
 
-### For iOS
+## Redux Integration
 
-```bash
-# using npm
-npm run ios
+The app uses Redux for state management. The `store` is configured in `src/Redux/Store.js`, and the user details are managed by the `global` reducer in `src/Redux/Reducers.js`.
 
-# OR using Yarn
-yarn ios
-```
+## Custom Components
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+- **Header**: Custom header component used across different screens.
+- **CustomButton**: Reusable button component.
+- **CustomTextInput**: Reusable text input component.
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+## Contributing
 
-## Step 3: Modifying your App
+If you wish to contribute to the Kabar app, please follow these steps:
 
-Now that you have successfully run the app, let's modify it.
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/your-feature-name`).
+3. Make your changes.
+4. Commit your changes (`git commit -am 'Add some feature'`).
+5. Push to the branch (`git push origin feature/your-feature-name`).
+6. Create a new Pull Request.
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+## License
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+This project is licensed under the MIT License.
 
-## Congratulations! :tada:
+## Contact
 
-You've successfully run and modified your React Native App. :partying_face:
+For any inquiries or feedback, please contact us at [priyanshu1kumar24@example.com].
 
-### Now what?
+---
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+We hope you enjoy using the Kabar app! If you have any questions or run into any issues, please don't hesitate to reach out. Happy coding!
